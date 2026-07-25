@@ -5,4 +5,5 @@ db/*.db
 .venv/
 venv/
 .pytest_cache/
+frontend-web/
 
