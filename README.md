@@ -5,9 +5,10 @@ service requests, urgent escalations) and executes a distinct, multi-step remedi
 workflow per type — with an audit trail, dashboard, batch processing, and a human
 escalation-override mechanism for cases the AI is unsure about.
 
-Two frontends ship against the same backend: a Streamlit console (`frontend/`) and a
-standalone HTML/CSS/JS site called "Request Classifier" (`frontend-web/`, not part of the
-deployment covered below).
+The Streamlit console (`frontend/`) is the frontend covered by this repo and the deployment
+steps below. A second, standalone HTML/CSS/JS frontend called "Request Classifier" was also
+built against the same backend during development, but it's kept local-only and isn't part
+of this repository or its deployment.
 
 ### Live Link: https://request-classifier-streamlit.onrender.com/
 
@@ -82,7 +83,8 @@ A `render.yaml` blueprint at the repo root defines both services. Steps:
    - `request-classifier-streamlit` — Streamlit, pointed at the backend via `API_BASE`
 3. Before the first deploy, set the secret env vars on the **backend** service (Render
    prompts for these since `render.yaml` marks them `sync: false`):
-   - `GROQ_API_KEY` (or `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`, matching `LLM_PROVIDER`)
+   - `GROQ_API_KEY` (or `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / the `AZURE_OPENAI_*` set,
+     matching `LLM_PROVIDER`)
 4. Deploy. Once the backend service is live, note its actual Render URL (something like
    `https://request-classifier-backend.onrender.com`) and confirm it matches the
    `API_BASE` value in `render.yaml` for the Streamlit service — if Render assigned a
@@ -172,7 +174,7 @@ Three channels, each its own form on the Customer side:
 |---|---|
 | Email | From address (doubles as customer identifier), Subject, Body |
 | Web Form | Email, optional full name, Topic, Message |
-| File Upload | A CSV (`customer_id, subject, body`), auto-processed in configurable batches (default 4) |
+| File Upload | A CSV (`customer_id, subject, body`); click Process Request to send it, in configurable batches (default 4) |
 
 Email and Web Form identify the customer by email address. File Upload keeps an explicit
 `customer_id` column since one file can carry requests for many different customers at once.
@@ -231,7 +233,7 @@ distinct from the 16 requests in [`data/sample_requests.csv`](data/sample_reques
     "Set 2-hour follow-up reminder"
   ],
   "outputs": {
-    "draft_acknowledgement": "Dear Marcus, We apologize for the inconvenience and frustration caused by the continued billing after your cancellation. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Our team is working to resolve the issue as soon as possible, and we will be in touch with an update on the refund.",
+    "draft_acknowledgement": "Dear Marcus,\n\nWe apologize for the inconvenience and frustration caused by the continued billing after your cancellation. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Our team is working to resolve the issue as soon as possible, and we will be in touch with an update on the refund.",
     "routing_notification": "[SIMULATED] Escalated to: Senior Handler Queue",
     "priority_flag": "high",
     "follow_up_due_at": "2026-07-25T18:08:57.845311+00:00"
@@ -301,7 +303,7 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
   "outputs": {
     "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location prior to their move next month.",
     "routing_notification": "[SIMULATED] Routed to: Account Management",
-    "draft_confirmation": "Dear Adrian, We have received your request to update your billing and shipping addresses. Your inquiry has been routed to our Account Management team, who will review and process your request. You can expect a response from them within the next 24 hours to confirm the updates.",
+    "draft_confirmation": "Dear Adrian,\n\nWe have received your request to update your billing and shipping addresses. Your inquiry has been routed to our Account Management team, who will review and process your request. You can expect a response from them within the next 24 hours to confirm the updates. We appreciate your prompt notification and look forward to ensuring your account information is up to date.\n\nBest regards,\nOperations Team",
     "sla_due_at": "2026-07-26T17:11:24.202228+00:00"
   },
   "status": "in_progress"
@@ -356,7 +358,7 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
   remediation into a state graph, but `classify.py` and `remediation/*.py` are plain
   functions with no orchestration awareness — swapping in n8n/Retool later is a rewiring
   exercise, not a rebuild.
-- **LLM provider:** Groq by default, swappable to OpenAI or Anthropic via one environment
-  variable, through the single factory in `llm_provider.py`.
+- **LLM provider:** Groq by default, swappable to OpenAI, Anthropic, or Azure OpenAI via one
+  environment variable, through the single factory in `llm_provider.py`.
 - **Reliability:** every LLM call has a timeout and bounded retry; a stalled provider
   call fails and retries instead of hanging the request.
