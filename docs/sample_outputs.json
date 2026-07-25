@@ -1,0 +1,104 @@
+[
+  {
+    "id": "46297a10-6a12-447f-b905-6a48efeac1eb",
+    "timestamp": "2026-07-25T15:04:46.666264+00:00",
+    "raw_text": "From: jane.doe@example.com\nSubject: Charged twice this month\n\nI have been charged twice for my subscription this month and nobody has responded to my last two emails. This is completely unacceptable and I want a refund immediately.",
+    "channel": "email",
+    "classification_type": "complaint",
+    "urgency": "high",
+    "confidence": 0.9,
+    "branch_taken": "complaint",
+    "remediation_steps": [
+      "Acknowledged receipt of complaint",
+      "Escalated to senior handler",
+      "Logged case with priority flag",
+      "Set 2-hour follow-up reminder"
+    ],
+    "outputs": {
+      "draft_acknowledgement": "Dear Jane,\n\nWe apologize for the inconvenience you've experienced with being charged twice for your subscription this month. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Your issue is being handled by our operations team, and we will be in touch with a resolution as soon as possible.\n\nBest regards,\nOperations Team",
+      "routing_notification": "[SIMULATED] Escalated to: Senior Handler Queue",
+      "priority_flag": "high",
+      "follow_up_due_at": "2026-07-25T17:04:46.665281+00:00"
+    },
+    "status": "escalated",
+    "overridden": false,
+    "original_classification": null,
+    "customer_id": "jane.doe@example.com"
+  },
+  {
+    "id": "29b34a61-a2cf-4397-9a00-acad351501e5",
+    "timestamp": "2026-07-25T15:04:47.491351+00:00",
+    "raw_text": "Topic: Billing\n\nCan you tell me when my next invoice is due and how I can view previous invoices online?",
+    "channel": "web_form",
+    "classification_type": "general_enquiry",
+    "urgency": "low",
+    "confidence": 0.9,
+    "branch_taken": "general_enquiry",
+    "remediation_steps": [
+      "Classified sub-topic: billing",
+      "Generated AI response from knowledge base",
+      "Sent response to customer",
+      "Logged as resolved"
+    ],
+    "outputs": {
+      "draft_response": "Dear customer, \n\nYour next invoice will be issued on the 1st of the upcoming month and will be due for payment within 14 days. To view your previous invoices, you can log in to your account portal and navigate to the 'Billing' tab, where you can also download them for your records. If you have any further questions or concerns, please don't hesitate to reach out.\n\nBest regards, \nOperations Team",
+      "kb_source": "billing",
+      "send_notification": "[SIMULATED] Response sent to customer"
+    },
+    "status": "resolved",
+    "overridden": false,
+    "original_classification": null,
+    "customer_id": "sam.oduya@example.com"
+  },
+  {
+    "id": "a5de2e2e-f728-448b-8a1f-fd9b4d3df1c2",
+    "timestamp": "2026-07-25T15:04:48.459856+00:00",
+    "raw_text": "Please cancel my add-on data package effective next billing cycle and confirm once it is done.",
+    "channel": "file_upload",
+    "classification_type": "service_request",
+    "urgency": "low",
+    "confidence": 0.9,
+    "branch_taken": "service_request",
+    "remediation_steps": [
+      "Extracted required details",
+      "Routed to relevant department: Account Management",
+      "Generated confirmation to requester",
+      "Set SLA timer (24h)"
+    ],
+    "outputs": {
+      "extracted_details": "The customer is requesting that their add-on data package be cancelled as of the start of their next billing cycle.",
+      "routing_notification": "[SIMULATED] Routed to: Account Management",
+      "draft_confirmation": "We have received your request to cancel your add-on data package, effective next billing cycle. Your request has been routed to our Account Management team for processing, and you can expect a response from them within the next 24 hours. They will review your request and confirm once the cancellation is complete. We appreciate your patience and will ensure that your request is addressed promptly.",
+      "sla_due_at": "2026-07-26T15:04:48.458853+00:00"
+    },
+    "status": "in_progress",
+    "overridden": false,
+    "original_classification": null,
+    "customer_id": "CUST-1010"
+  },
+  {
+    "id": "c8d7736f-7b5e-4194-b041-92ac673b8880",
+    "timestamp": "2026-07-25T15:04:49.228204+00:00",
+    "raw_text": "URGENT: there appears to be unauthorized access on my account, someone changed my password and I can no longer log in. Please help immediately, I think I have been hacked.",
+    "channel": "web_form",
+    "classification_type": "escalation",
+    "urgency": "critical",
+    "confidence": 0.9,
+    "branch_taken": "escalation",
+    "remediation_steps": [
+      "Immediately flagged for human review",
+      "Drafted urgent acknowledgement",
+      "Notified supervisor",
+      "Paused auto-resolution pending human sign-off"
+    ],
+    "outputs": {
+      "human_in_the_loop_flag": true,
+      "draft_acknowledgement": "We understand the urgency and concern regarding the unauthorized access to your account, and we apologize for the inconvenience this has caused. Your issue has been immediately escalated to a supervisor for priority attention. We are working to resolve this matter as quickly as possible to ensure the security of your account, and you will be contacted shortly with further assistance. Please be assured that we are taking all necessary steps to address this situation promptly.",
+      "supervisor_alert": "[SIMULATED] Supervisor notified via priority channel"
+    },
+    "status": "pending_review",
+    "overridden": false,
+    "original_classification": null,
+    "customer_id": "priya.k@example.com"
+  }
+]

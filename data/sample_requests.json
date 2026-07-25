@@ -1,0 +1,98 @@
+[
+  {
+    "raw_text": "I've been charged twice for my subscription this month and nobody has responded to my last two emails. This is completely unacceptable and I want a refund immediately.",
+    "channel": "email",
+    "customer_id": "CUST-1001",
+    "expected_type": "complaint"
+  },
+  {
+    "raw_text": "Your technician came to fix my internet last week and it's still not working properly. I've had to work from a coffee shop for three days now and I'm losing money because of this.",
+    "channel": "web_form",
+    "customer_id": "CUST-1002",
+    "expected_type": "complaint"
+  },
+  {
+    "raw_text": "The staff member I spoke to on the phone yesterday was extremely rude and dismissive when I asked a simple question about my bill. I want this raised with a manager.",
+    "channel": "shared_inbox",
+    "customer_id": "CUST-1003",
+    "expected_type": "complaint"
+  },
+  {
+    "raw_text": "I ordered a replacement device two weeks ago and it arrived damaged. This is the second time this has happened and I'm very frustrated with the quality control.",
+    "channel": "email",
+    "customer_id": "CUST-1004",
+    "expected_type": "complaint"
+  },
+  {
+    "raw_text": "Hi, what are your customer support hours on weekends? I want to know if I can call in on a Saturday afternoon.",
+    "channel": "web_form",
+    "customer_id": "CUST-1005",
+    "expected_type": "general_enquiry"
+  },
+  {
+    "raw_text": "Can you tell me when my next invoice is due and how I can view previous invoices online?",
+    "channel": "email",
+    "customer_id": "CUST-1006",
+    "expected_type": "general_enquiry"
+  },
+  {
+    "raw_text": "Do you offer international roaming on the basic plan, or do I need to upgrade to get that?",
+    "channel": "shared_inbox",
+    "customer_id": "CUST-1007",
+    "expected_type": "general_enquiry"
+  },
+  {
+    "raw_text": "What's the difference between the Standard and Premium support tiers? Just trying to understand before I decide.",
+    "channel": "web_form",
+    "customer_id": "CUST-1008",
+    "expected_type": "general_enquiry"
+  },
+  {
+    "raw_text": "I'd like to update the mailing address on my account and also switch my payment method to a new card, please let me know what you need from me.",
+    "channel": "email",
+    "customer_id": "CUST-1009",
+    "expected_type": "service_request"
+  },
+  {
+    "raw_text": "Please cancel my add-on data package effective next billing cycle and confirm once it's done.",
+    "channel": "web_form",
+    "customer_id": "CUST-1010",
+    "expected_type": "service_request"
+  },
+  {
+    "raw_text": "I need to upgrade my current plan to the higher tier and would like a callback to confirm pricing before it goes through.",
+    "channel": "shared_inbox",
+    "customer_id": "CUST-1011",
+    "expected_type": "service_request"
+  },
+  {
+    "raw_text": "Could you please transfer my account to my new business entity? I have the registration documents ready to send over.",
+    "channel": "email",
+    "customer_id": "CUST-1012",
+    "expected_type": "service_request"
+  },
+  {
+    "raw_text": "Our entire office network has been down for six hours and we are a healthcare clinic with patients waiting on urgent lab results. This needs to be fixed right now or we will be moving providers today.",
+    "channel": "shared_inbox",
+    "customer_id": "CUST-1013",
+    "expected_type": "escalation"
+  },
+  {
+    "raw_text": "I am extremely upset. My account was suspended by mistake and I have a payment due tomorrow morning that I now cannot make. If this isn't fixed within the hour I am contacting my lawyer.",
+    "channel": "email",
+    "customer_id": "CUST-1014",
+    "expected_type": "escalation"
+  },
+  {
+    "raw_text": "URGENT: there appears to be unauthorized access on my account, someone changed my password and I can no longer log in. Please help immediately, I think I've been hacked.",
+    "channel": "web_form",
+    "customer_id": "CUST-1015",
+    "expected_type": "escalation"
+  },
+  {
+    "raw_text": "So basically the thing you sent me last time didn't really work and now I'm not sure what to do, maybe you can just sort it out or tell me who can, it's kind of urgent I guess but also I don't really know what's wrong exactly.",
+    "channel": "email",
+    "customer_id": "CUST-1016",
+    "expected_type": "ambiguous"
+  }
+]
