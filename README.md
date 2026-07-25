@@ -260,7 +260,9 @@ pulling a canned article, demonstrating the KB-miss path (see [`general_enquiry.
 default-entry fallback, also covered by `test_general_enquiry_falls_back_to_default_kb_entry_for_unknown_topic`).
 
 ### Service Request
-**Input** (file upload row, `customer_id: CUST-2044`):
+**Input** (email from `adrian.foster@example.com`):
+> Subject: Address update before move
+>
 > I am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.
 
 **Output log:**
@@ -277,10 +279,10 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
     "Set SLA timer (24h)"
   ],
   "outputs": {
-    "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location.",
+    "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location prior to their move next month.",
     "routing_notification": "[SIMULATED] Routed to: Account Management",
-    "draft_confirmation": "We have received your request to update your billing and shipping addresses due to your relocation. We have routed your request to our Account Management team, who will review and process the changes as soon as possible. You can expect a response from them within the next 24 hours to confirm the updates have been completed.",
-    "sla_due_at": "2026-07-26T16:08:59.347088+00:00"
+    "draft_confirmation": "Dear Adrian, We have received your request to update your billing and shipping addresses. Your inquiry has been routed to our Account Management team, who will review and process your request. You can expect a response from them within the next 24 hours to confirm the updates.",
+    "sla_due_at": "2026-07-26T17:11:24.202228+00:00"
   },
   "status": "in_progress"
 }

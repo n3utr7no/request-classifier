@@ -51,10 +51,10 @@
     "customer_id": "priya.n@example.com"
   },
   {
-    "id": "d56c4588-645e-46bb-afe2-af1b3ff80108",
-    "timestamp": "2026-07-25T16:08:59.348102+00:00",
-    "raw_text": "I am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.",
-    "channel": "file_upload",
+    "id": "9a41a428-9cfc-4d4d-a05f-f95d642a89f9",
+    "timestamp": "2026-07-25T17:11:24.203259+00:00",
+    "raw_text": "From: adrian.foster@example.com\nSubject: Address update before move\n\nI am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.",
+    "channel": "email",
     "classification_type": "service_request",
     "urgency": "medium",
     "confidence": 0.9,
@@ -66,15 +66,15 @@
       "Set SLA timer (24h)"
     ],
     "outputs": {
-      "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location.",
+      "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location prior to their move next month.",
       "routing_notification": "[SIMULATED] Routed to: Account Management",
-      "draft_confirmation": "We have received your request to update your billing and shipping addresses due to your relocation. We have routed your request to our Account Management team, who will review and process the changes as soon as possible. You can expect a response from them within the next 24 hours to confirm the updates have been completed.",
-      "sla_due_at": "2026-07-26T16:08:59.347088+00:00"
+      "draft_confirmation": "Dear Adrian,\n\nWe have received your request to update your billing and shipping addresses. Your inquiry has been routed to our Account Management team, who will review and process your request. You can expect a response from them within the next 24 hours to confirm the updates. We appreciate your prompt notification and look forward to ensuring your account information is up to date.\n\nBest regards,\nOperations Team",
+      "sla_due_at": "2026-07-26T17:11:24.202228+00:00"
     },
     "status": "in_progress",
     "overridden": false,
     "original_classification": null,
-    "customer_id": "CUST-2044"
+    "customer_id": "adrian.foster@example.com"
   },
   {
     "id": "ca0200c2-83f9-4b0d-8c22-fea4c2af6f43",
