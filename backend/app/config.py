@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     # --- LLM provider ---
     llm_provider: str = "groq"  # groq | openai | anthropic | azure_openai
-    llm_model_groq: str = "llama-3.3-70b-versatile"
+    llm_model_groq: str = "openai/gpt-oss-120b"
     llm_model_openai: str = "gpt-4o-mini"
     llm_model_anthropic: str = "claude-sonnet-5"
     llm_temperature: float = 0.2
