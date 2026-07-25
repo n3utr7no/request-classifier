@@ -140,8 +140,8 @@ with tab_customer:
     elif channel == "file_upload":
         st.caption(
             "Mirrors a customer (or agent) uploading a CSV of one or more requests at once — "
-            "columns: `customer_id, subject, body`. Uploading a file processes it automatically, "
-            "in chunks of the batch size below."
+            "columns: `customer_id, subject, body`. Select a file, then click Process Request "
+            "to send it, in chunks of the batch size below."
         )
         st.number_input(
             "Batch size",
@@ -160,7 +160,15 @@ with tab_customer:
             "Upload CSV (customer_id, subject, body)", type="csv", key="csv_uploader"
         )
 
-        if uploaded_csv is not None and uploaded_csv.file_id != st.session_state.last_processed_file_id:
+        process_clicked = st.button(
+            "Process Request", type="primary", key="submit_file_upload", disabled=uploaded_csv is None
+        )
+
+        if uploaded_csv is None:
+            pass
+        elif not process_clicked and uploaded_csv.file_id == st.session_state.last_processed_file_id:
+            st.caption(f"'{uploaded_csv.name}' was already processed. Click Process Request to send it again.")
+        elif process_clicked:
             # Lock in the batch size for this file's entire run, right now — a later
             # change to the widget must only affect the *next* uploaded file.
             locked_batch_size = st.session_state["batch_size_input"]
