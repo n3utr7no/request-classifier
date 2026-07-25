@@ -49,10 +49,10 @@ cd backend
 pytest -v
 ```
 
-28 tests: config defaults, Pydantic validation, SQLite CRUD/aggregation, all five
-remediation branches (LLM calls mocked, so these run offline), the classify→route decision,
-health-check behavior, and the FastAPI endpoints (submission, batch error isolation,
-override, dashboard).
+32 tests: config defaults, Pydantic validation (including the `raw_text` minimum-length
+rule), SQLite CRUD/aggregation, all six remediation branches (LLM calls mocked, so these
+run offline), the classify→route decision (including gibberish-input routing), health-check
+behavior, and the FastAPI endpoints (submission, batch error isolation, override, dashboard).
 
 ## Deployment (Render)
 
