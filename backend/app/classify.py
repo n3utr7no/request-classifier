@@ -14,9 +14,20 @@ poor service, broken product, rude staff, etc.)
 - general_enquiry: the customer is asking a question or wants information, with no complaint \
 or account-changing action implied
 - service_request: the customer wants something done to their account/service (change plan, \
-update details, request a callback, cancel/add a service, etc.)
+update details, request a callback, cancel/add a service, etc.) with no urgency or safety \
+concern involved
 - escalation: the request is urgent, high-stakes, or the customer is explicitly threatening to \
-leave / involve legal / demanding a manager, or describes a safety/critical issue
+leave / involve legal / demanding a manager, or describes a safety/critical issue. This ALWAYS \
+includes suspected account compromise, unauthorized access, a hacked account, or a security \
+breach, even if it also involves an account action like locking or securing the account — the \
+security/safety concern makes it an escalation, not a service_request.
+
+The request text may include a channel-supplied label such as "Topic: Account" or "Topic: \
+Billing" ahead of the customer's actual message. Treat that label only as a rough hint for \
+sub_topic, never as a signal for request_type — request_type must be decided from the customer's \
+actual message content and intent, not from the topic label a web form happened to categorize it \
+under. A message describing a security incident is an escalation regardless of what topic it was \
+filed under.
 
 urgency must be one of: low, medium, high, critical.
 
