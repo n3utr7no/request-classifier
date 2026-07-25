@@ -61,8 +61,8 @@ def render_result(record: dict) -> None:
     render_outputs(record["outputs"])
 
 
-tab_customer, tab_backend, tab_dashboard, tab_review = st.tabs(
-    ["Customer", "Backend", "Dashboard", "Review Queue"]
+tab_customer, tab_backend, tab_dashboard, tab_review, tab_escalated = st.tabs(
+    ["Customer", "Backend", "Dashboard", "Review Queue", "Escalated"]
 )
 
 # --- Backend tab, part 1: processing-log placeholder created up front so the ---
@@ -292,3 +292,32 @@ with tab_review:
                         st.error(f"Override failed: {override_resp.status_code} {override_resp.text}")
     else:
         st.error("Could not load review queue.")
+
+with tab_escalated:
+    st.write("Every request that was ever routed through the urgent-escalation branch, "
+             "regardless of whether it's since been resolved or overridden.")
+    resp = requests.get(f"{API_BASE}/requests")
+    if resp.ok:
+        records = resp.json()
+        # Anything the AI ever routed through the Escalation branch: either it's still
+        # classified that way now, or it was originally escalation before a human
+        # override corrected it to something else.
+        escalated = [
+            r
+            for r in records
+            if r["classification_type"] == "escalation"
+            or (r.get("original_classification") and r["original_classification"].get("request_type") == "escalation")
+        ]
+        st.caption(f"{len(escalated)} request(s) ever flagged as an urgent escalation.")
+        if not escalated:
+            st.info("No escalations recorded yet.")
+        for record in escalated:
+            was_overridden_away = record["classification_type"] != "escalation"
+            header = (
+                f"{record.get('customer_id', '—')}  ·  {record['timestamp']}  ·  {record['status']}"
+                f"{'  ·  RECLASSIFIED BY HUMAN' if was_overridden_away else ''}"
+            )
+            with st.expander(header):
+                render_result(record)
+    else:
+        st.error("Could not load escalated requests.")
