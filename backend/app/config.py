@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     # --- LLM provider ---
-    llm_provider: str = "groq"  # groq | openai | anthropic
+    llm_provider: str = "groq"  # groq | openai | anthropic | azure_openai
     llm_model_groq: str = "llama-3.3-70b-versatile"
     llm_model_openai: str = "gpt-4o-mini"
     llm_model_anthropic: str = "claude-sonnet-5"
@@ -17,6 +17,12 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     openai_api_key: str = ""
     anthropic_api_key: str = ""
+
+    # --- Azure OpenAI (used when llm_provider = azure_openai) ---
+    azure_openai_api_key: str = ""
+    azure_openai_endpoint: str = ""
+    azure_openai_chat_deployment: str = ""
+    azure_openai_api_version: str = "2024-08-01-preview"
 
     # --- Routing / classification ---
     confidence_threshold: float = 0.6  # below this -> human_review branch (AI uncertain about type)

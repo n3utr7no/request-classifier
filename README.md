@@ -35,8 +35,18 @@ streamlit run streamlit_app.py
 Edit `backend/.env`:
 
 ```
-LLM_PROVIDER=openai        # or anthropic
+LLM_PROVIDER=openai        # or anthropic, or azure_openai
 OPENAI_API_KEY=sk-...
+```
+
+For Azure OpenAI specifically:
+
+```
+LLM_PROVIDER=azure_openai
+AZURE_OPENAI_API_KEY=...
+AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
+AZURE_OPENAI_CHAT_DEPLOYMENT=your-deployment-name
+AZURE_OPENAI_API_VERSION=2024-08-01-preview   # optional, this is the default
 ```
 
 No code changes required — `backend/app/llm_provider.py` is the single factory every

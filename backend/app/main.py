@@ -45,6 +45,7 @@ def health() -> JSONResponse:
         "groq": settings.groq_api_key,
         "openai": settings.openai_api_key,
         "anthropic": settings.anthropic_api_key,
+        "azure_openai": settings.azure_openai_api_key,
     }.get(provider, "")
     checks["llm_provider"] = provider
     checks["llm_api_key_configured"] = bool(api_key)

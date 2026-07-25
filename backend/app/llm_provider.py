@@ -45,4 +45,16 @@ def get_chat_model() -> BaseChatModel:
             timeout=settings.llm_timeout_seconds,
         )
 
+    if provider == "azure_openai":
+        from langchain_openai import AzureChatOpenAI
+
+        return AzureChatOpenAI(
+            azure_endpoint=settings.azure_openai_endpoint,
+            azure_deployment=settings.azure_openai_chat_deployment,
+            api_version=settings.azure_openai_api_version,
+            api_key=settings.azure_openai_api_key,
+            temperature=settings.llm_temperature,
+            timeout=settings.llm_timeout_seconds,
+        )
+
     raise ValueError(f"Unknown LLM_PROVIDER: {settings.llm_provider!r}")
