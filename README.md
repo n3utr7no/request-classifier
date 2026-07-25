@@ -192,14 +192,16 @@ overridable via `.env`. Nothing is hardcoded inline in a remediation module.
 
 ## Sample Input Requests and Corresponding Output Logs
 
-One real request per branch type, submitted to the live backend and captured verbatim
-(also saved as JSON at [`docs/sample_outputs.json`](docs/sample_outputs.json)).
+One request per branch type, submitted to the live backend and captured verbatim (also
+saved as JSON at [`docs/sample_outputs.json`](docs/sample_outputs.json)). These are
+distinct from the 16 requests in [`data/sample_requests.csv`](data/sample_requests.csv) /
+[`data/sample_requests.json`](data/sample_requests.json), which are the batch-upload demo set.
 
 ### Complaint
-**Input** (email from `jane.doe@example.com`):
-> Subject: Charged twice this month
+**Input** (email from `marcus.lee@example.com`):
+> Subject: Still being billed after cancellation
 >
-> I have been charged twice for my subscription this month and nobody has responded to my last two emails. This is completely unacceptable and I want a refund immediately.
+> I cancelled my premium plan three weeks ago but you charged me full price again this month. I have called twice and nobody fixed it. I am furious and want this refunded today.
 
 **Output log:**
 ```json
@@ -215,18 +217,18 @@ One real request per branch type, submitted to the live backend and captured ver
     "Set 2-hour follow-up reminder"
   ],
   "outputs": {
-    "draft_acknowledgement": "Dear Jane, We apologize for the inconvenience you've experienced with being charged twice for your subscription this month. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter...",
+    "draft_acknowledgement": "Dear Marcus, We apologize for the inconvenience and frustration caused by the continued billing after your cancellation. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Our team is working to resolve the issue as soon as possible, and we will be in touch with an update on the refund.",
     "routing_notification": "[SIMULATED] Escalated to: Senior Handler Queue",
     "priority_flag": "high",
-    "follow_up_due_at": "2026-07-25T17:04:46.665281+00:00"
+    "follow_up_due_at": "2026-07-25T18:08:57.845311+00:00"
   },
   "status": "escalated"
 }
 ```
 
 ### General Enquiry
-**Input** (web form, topic Billing, from `sam.oduya@example.com`):
-> Can you tell me when my next invoice is due and how I can view previous invoices online?
+**Input** (web form, topic App, from `priya.n@example.com`):
+> Do you have a mobile app I can use to check my data usage and manage my subscription settings?
 
 **Output log:**
 ```json
@@ -236,29 +238,34 @@ One real request per branch type, submitted to the live backend and captured ver
   "confidence": 0.9,
   "branch_taken": "general_enquiry",
   "remediation_steps": [
-    "Classified sub-topic: billing",
+    "Classified sub-topic: mobile app",
     "Generated AI response from knowledge base",
     "Sent response to customer",
     "Logged as resolved"
   ],
   "outputs": {
-    "draft_response": "Your next invoice will be issued on the 1st of the upcoming month and will be due for payment within 14 days. To view your previous invoices, you can log in to your account portal and navigate to the 'Billing' tab...",
-    "kb_source": "billing",
+    "draft_response": "We appreciate your interest in managing your account on-the-go. Unfortunately, we don't have specific information on a mobile app for checking data usage and managing subscription settings readily available. A member of our team will follow up with more detailed information on this topic shortly. We'll do our best to provide you with the assistance you need as soon as possible.",
+    "kb_source": "mobile app",
     "send_notification": "[SIMULATED] Response sent to customer"
   },
   "status": "resolved"
 }
 ```
 
+Note the `kb_source: "mobile app"` — this sub-topic has no entry in the mock knowledge base
+(`backend/app/knowledge_base.py`), so the LLM drafted a generic fallback response rather than
+pulling a canned article, demonstrating the KB-miss path (see [`general_enquiry.py`](backend/app/remediation/general_enquiry.py)'s
+default-entry fallback, also covered by `test_general_enquiry_falls_back_to_default_kb_entry_for_unknown_topic`).
+
 ### Service Request
-**Input** (file upload row, `customer_id: CUST-1010`):
-> Please cancel my add-on data package effective next billing cycle and confirm once it is done.
+**Input** (file upload row, `customer_id: CUST-2044`):
+> I am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.
 
 **Output log:**
 ```json
 {
   "classification_type": "service_request",
-  "urgency": "low",
+  "urgency": "medium",
   "confidence": 0.9,
   "branch_taken": "service_request",
   "remediation_steps": [
@@ -268,25 +275,25 @@ One real request per branch type, submitted to the live backend and captured ver
     "Set SLA timer (24h)"
   ],
   "outputs": {
-    "extracted_details": "The customer is requesting that their add-on data package be cancelled as of the start of their next billing cycle.",
+    "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location.",
     "routing_notification": "[SIMULATED] Routed to: Account Management",
-    "draft_confirmation": "We have received your request to cancel your add-on data package, effective next billing cycle. Your request has been routed to our Account Management team for processing...",
-    "sla_due_at": "2026-07-26T15:04:48.458853+00:00"
+    "draft_confirmation": "We have received your request to update your billing and shipping addresses due to your relocation. We have routed your request to our Account Management team, who will review and process the changes as soon as possible. You can expect a response from them within the next 24 hours to confirm the updates have been completed.",
+    "sla_due_at": "2026-07-26T16:08:59.347088+00:00"
   },
   "status": "in_progress"
 }
 ```
 
 ### Escalation / Urgent
-**Input** (web form, from `priya.k@example.com`):
-> URGENT: there appears to be unauthorized access on my account, someone changed my password and I can no longer log in. Please help immediately, I think I have been hacked.
+**Input** (web form, from `devon.k@example.com`):
+> URGENT: someone has taken over my account, changed my password and my registered email, and is trying to access my linked payment details. I need this locked down immediately or I am contacting my bank and a lawyer today.
 
 **Output log:**
 ```json
 {
   "classification_type": "escalation",
   "urgency": "critical",
-  "confidence": 0.9,
+  "confidence": 0.99,
   "branch_taken": "escalation",
   "remediation_steps": [
     "Immediately flagged for human review",
@@ -296,7 +303,7 @@ One real request per branch type, submitted to the live backend and captured ver
   ],
   "outputs": {
     "human_in_the_loop_flag": true,
-    "draft_acknowledgement": "We understand the urgency and concern regarding the unauthorized access to your account, and we apologize for the inconvenience this has caused. Your issue has been immediately escalated to a supervisor for priority attention...",
+    "draft_acknowledgement": "We understand the urgency and severity of the situation with your account, and we apologize for the distress this has caused. Your issue has been immediately escalated to a supervisor for priority attention, and we are taking swift action to secure your account. We will work diligently to resolve this matter as quickly as possible and will be in touch with you shortly to provide an update. Please be assured that we are treating this with the utmost importance and will do everything possible to protect your account and linked payment details.",
     "supervisor_alert": "[SIMULATED] Supervisor notified via priority channel"
   },
   "status": "pending_review"

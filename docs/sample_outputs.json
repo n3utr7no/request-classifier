@@ -1,8 +1,8 @@
 [
   {
-    "id": "46297a10-6a12-447f-b905-6a48efeac1eb",
-    "timestamp": "2026-07-25T15:04:46.666264+00:00",
-    "raw_text": "From: jane.doe@example.com\nSubject: Charged twice this month\n\nI have been charged twice for my subscription this month and nobody has responded to my last two emails. This is completely unacceptable and I want a refund immediately.",
+    "id": "d68303f4-019e-40f7-a8d8-941e7afd5e56",
+    "timestamp": "2026-07-25T16:08:57.846310+00:00",
+    "raw_text": "From: marcus.lee@example.com\nSubject: Still being billed after cancellation\n\nI cancelled my premium plan three weeks ago but you charged me full price again this month. I have called twice and nobody fixed it. I am furious and want this refunded today.",
     "channel": "email",
     "classification_type": "complaint",
     "urgency": "high",
@@ -15,48 +15,48 @@
       "Set 2-hour follow-up reminder"
     ],
     "outputs": {
-      "draft_acknowledgement": "Dear Jane,\n\nWe apologize for the inconvenience you've experienced with being charged twice for your subscription this month. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Your issue is being handled by our operations team, and we will be in touch with a resolution as soon as possible.\n\nBest regards,\nOperations Team",
+      "draft_acknowledgement": "Dear Marcus,\n\nWe apologize for the inconvenience and frustration caused by the continued billing after your cancellation. We acknowledge receipt of your complaint and want to assure you that we are actively looking into this matter. Our team is working to resolve the issue as soon as possible, and we will be in touch with an update on the refund.",
       "routing_notification": "[SIMULATED] Escalated to: Senior Handler Queue",
       "priority_flag": "high",
-      "follow_up_due_at": "2026-07-25T17:04:46.665281+00:00"
+      "follow_up_due_at": "2026-07-25T18:08:57.845311+00:00"
     },
     "status": "escalated",
     "overridden": false,
     "original_classification": null,
-    "customer_id": "jane.doe@example.com"
+    "customer_id": "marcus.lee@example.com"
   },
   {
-    "id": "29b34a61-a2cf-4397-9a00-acad351501e5",
-    "timestamp": "2026-07-25T15:04:47.491351+00:00",
-    "raw_text": "Topic: Billing\n\nCan you tell me when my next invoice is due and how I can view previous invoices online?",
+    "id": "4b6bde2c-0957-488a-9010-a64e8f9dceb2",
+    "timestamp": "2026-07-25T16:08:58.517725+00:00",
+    "raw_text": "Topic: App\n\nDo you have a mobile app I can use to check my data usage and manage my subscription settings?",
     "channel": "web_form",
     "classification_type": "general_enquiry",
     "urgency": "low",
     "confidence": 0.9,
     "branch_taken": "general_enquiry",
     "remediation_steps": [
-      "Classified sub-topic: billing",
+      "Classified sub-topic: mobile app",
       "Generated AI response from knowledge base",
       "Sent response to customer",
       "Logged as resolved"
     ],
     "outputs": {
-      "draft_response": "Dear customer, \n\nYour next invoice will be issued on the 1st of the upcoming month and will be due for payment within 14 days. To view your previous invoices, you can log in to your account portal and navigate to the 'Billing' tab, where you can also download them for your records. If you have any further questions or concerns, please don't hesitate to reach out.\n\nBest regards, \nOperations Team",
-      "kb_source": "billing",
+      "draft_response": "We appreciate your interest in managing your account on-the-go. Unfortunately, we don't have specific information on a mobile app for checking data usage and managing subscription settings readily available. A member of our team will follow up with more detailed information on this topic shortly. We'll do our best to provide you with the assistance you need as soon as possible.",
+      "kb_source": "mobile app",
       "send_notification": "[SIMULATED] Response sent to customer"
     },
     "status": "resolved",
     "overridden": false,
     "original_classification": null,
-    "customer_id": "sam.oduya@example.com"
+    "customer_id": "priya.n@example.com"
   },
   {
-    "id": "a5de2e2e-f728-448b-8a1f-fd9b4d3df1c2",
-    "timestamp": "2026-07-25T15:04:48.459856+00:00",
-    "raw_text": "Please cancel my add-on data package effective next billing cycle and confirm once it is done.",
+    "id": "d56c4588-645e-46bb-afe2-af1b3ff80108",
+    "timestamp": "2026-07-25T16:08:59.348102+00:00",
+    "raw_text": "I am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.",
     "channel": "file_upload",
     "classification_type": "service_request",
-    "urgency": "low",
+    "urgency": "medium",
     "confidence": 0.9,
     "branch_taken": "service_request",
     "remediation_steps": [
@@ -66,24 +66,24 @@
       "Set SLA timer (24h)"
     ],
     "outputs": {
-      "extracted_details": "The customer is requesting that their add-on data package be cancelled as of the start of their next billing cycle.",
+      "extracted_details": "The customer is requesting that their billing address and shipping address on file be updated to reflect their new location.",
       "routing_notification": "[SIMULATED] Routed to: Account Management",
-      "draft_confirmation": "We have received your request to cancel your add-on data package, effective next billing cycle. Your request has been routed to our Account Management team for processing, and you can expect a response from them within the next 24 hours. They will review your request and confirm once the cancellation is complete. We appreciate your patience and will ensure that your request is addressed promptly.",
-      "sla_due_at": "2026-07-26T15:04:48.458853+00:00"
+      "draft_confirmation": "We have received your request to update your billing and shipping addresses due to your relocation. We have routed your request to our Account Management team, who will review and process the changes as soon as possible. You can expect a response from them within the next 24 hours to confirm the updates have been completed.",
+      "sla_due_at": "2026-07-26T16:08:59.347088+00:00"
     },
     "status": "in_progress",
     "overridden": false,
     "original_classification": null,
-    "customer_id": "CUST-1010"
+    "customer_id": "CUST-2044"
   },
   {
-    "id": "c8d7736f-7b5e-4194-b041-92ac673b8880",
-    "timestamp": "2026-07-25T15:04:49.228204+00:00",
-    "raw_text": "URGENT: there appears to be unauthorized access on my account, someone changed my password and I can no longer log in. Please help immediately, I think I have been hacked.",
+    "id": "ca0200c2-83f9-4b0d-8c22-fea4c2af6f43",
+    "timestamp": "2026-07-25T16:09:00.462882+00:00",
+    "raw_text": "URGENT: someone has taken over my account, changed my password and my registered email, and is trying to access my linked payment details. I need this locked down immediately or I am contacting my bank and a lawyer today.",
     "channel": "web_form",
     "classification_type": "escalation",
     "urgency": "critical",
-    "confidence": 0.9,
+    "confidence": 0.99,
     "branch_taken": "escalation",
     "remediation_steps": [
       "Immediately flagged for human review",
@@ -93,12 +93,12 @@
     ],
     "outputs": {
       "human_in_the_loop_flag": true,
-      "draft_acknowledgement": "We understand the urgency and concern regarding the unauthorized access to your account, and we apologize for the inconvenience this has caused. Your issue has been immediately escalated to a supervisor for priority attention. We are working to resolve this matter as quickly as possible to ensure the security of your account, and you will be contacted shortly with further assistance. Please be assured that we are taking all necessary steps to address this situation promptly.",
+      "draft_acknowledgement": "We understand the urgency and severity of the situation with your account, and we apologize for the distress this has caused. Your issue has been immediately escalated to a supervisor for priority attention, and we are taking swift action to secure your account. We will work diligently to resolve this matter as quickly as possible and will be in touch with you shortly to provide an update. Please be assured that we are treating this with the utmost importance and will do everything possible to protect your account and linked payment details.",
       "supervisor_alert": "[SIMULATED] Supervisor notified via priority channel"
     },
     "status": "pending_review",
     "overridden": false,
     "original_classification": null,
-    "customer_id": "priya.k@example.com"
+    "customer_id": "devon.k@example.com"
   }
 ]
