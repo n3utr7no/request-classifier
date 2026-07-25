@@ -205,6 +205,8 @@ distinct from the 16 requests in [`data/sample_requests.csv`](data/sample_reques
 >
 > I cancelled my premium plan three weeks ago but you charged me full price again this month. I have called twice and nobody fixed it. I am furious and want this refunded today.
 
+![Complaint intake form](images/marcus_input.png)
+
 **Output log:**
 ```json
 {
@@ -228,9 +230,13 @@ distinct from the 16 requests in [`data/sample_requests.csv`](data/sample_reques
 }
 ```
 
+![Complaint output](images/marcus_output.png)
+
 ### General Enquiry
 **Input** (web form, topic App, from `priya.n@example.com`):
 > Do you have a mobile app I can use to check my data usage and manage my subscription settings?
+
+![General Enquiry intake form](images/priya_ip.png)
 
 **Output log:**
 ```json
@@ -254,6 +260,8 @@ distinct from the 16 requests in [`data/sample_requests.csv`](data/sample_reques
 }
 ```
 
+![General Enquiry output](images/priya_op.png)
+
 Note the `kb_source: "mobile app"` — this sub-topic has no entry in the mock knowledge base
 (`backend/app/knowledge_base.py`), so the LLM drafted a generic fallback response rather than
 pulling a canned article, demonstrating the KB-miss path (see [`general_enquiry.py`](backend/app/remediation/general_enquiry.py)'s
@@ -264,6 +272,8 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
 > Subject: Address update before move
 >
 > I am relocating next month and need to update my billing address and shipping address on file, please update both and confirm once done.
+
+![Service Request intake form](images/adrian_ip.png)
 
 **Output log:**
 ```json
@@ -288,9 +298,13 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
 }
 ```
 
+![Service Request output](images/adrian_op.png)
+
 ### Escalation / Urgent
 **Input** (web form, from `devon.k@example.com`):
 > URGENT: someone has taken over my account, changed my password and my registered email, and is trying to access my linked payment details. I need this locked down immediately or I am contacting my bank and a lawyer today.
+
+![Escalation intake form](images/devon_ip.png)
 
 **Output log:**
 ```json
@@ -313,6 +327,8 @@ default-entry fallback, also covered by `test_general_enquiry_falls_back_to_defa
   "status": "pending_review"
 }
 ```
+
+![Escalation output](images/devon_op.png)
 
 ## Optional Enhancements Implemented
 
