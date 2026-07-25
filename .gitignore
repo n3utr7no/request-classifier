@@ -6,4 +6,5 @@ db/*.db
 venv/
 .pytest_cache/
 frontend-web/
+docs/five_slide_deck.md
 
