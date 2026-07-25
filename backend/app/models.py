@@ -5,12 +5,12 @@ from pydantic import BaseModel, Field
 
 RequestType = Literal["complaint", "general_enquiry", "service_request", "escalation"]
 Urgency = Literal["low", "medium", "high", "critical"]
-Status = Literal["resolved", "in_progress", "escalated", "pending_review"]
+Status = Literal["resolved", "in_progress", "escalated", "pending_review", "needs_clarification"]
 Channel = Literal["email", "web_form", "file_upload"]
 
 
 class RequestIn(BaseModel):
-    raw_text: str
+    raw_text: str = Field(min_length=10)
     channel: Channel = "email"
     customer_id: str
 
@@ -21,6 +21,7 @@ class ClassificationResult(BaseModel):
     confidence: float = Field(ge=0.0, le=1.0)
     sub_topic: Optional[str] = None
     reasoning: str
+    is_gibberish: bool = False
 
 
 class OverrideIn(BaseModel):

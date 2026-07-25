@@ -26,6 +26,13 @@ text is ambiguous/incomplete.
 
 If relevant, extract a short sub_topic (e.g. "billing", "technical", "account", "general").
 Give a one-sentence reasoning for your classification.
+
+Also set is_gibberish to true if the request text is NOT an intelligible customer request \
+in any language: random characters, keyboard mashing, repeated symbols, or text with no \
+discernible meaning or intent. Genuine requests that are merely short, informal, or poorly \
+worded are NOT gibberish. When is_gibberish is true, still fill request_type/urgency with \
+your best guess, but is_gibberish is the authoritative signal that the request cannot be \
+processed as-is.
 """
 
 

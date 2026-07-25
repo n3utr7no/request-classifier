@@ -18,7 +18,7 @@ from app.classify import classify_request
 from app.config import settings
 from app.models import ClassificationResult
 from app.remediation import BRANCH_HANDLERS
-from app.remediation import human_review
+from app.remediation import clarify, human_review
 
 
 class WorkflowState(TypedDict):
@@ -75,7 +75,13 @@ def human_review_node(state: WorkflowState) -> WorkflowState:
     return _run_branch(human_review.run, state, "human_review")
 
 
+def clarify_node(state: WorkflowState) -> WorkflowState:
+    return _run_branch(clarify.run, state, "clarify")
+
+
 def route_after_classify(state: WorkflowState) -> str:
+    if state["classification"].is_gibberish:
+        return "clarify"
     if state["needs_human_review"]:
         return "human_review"
     return state["classification"].request_type
@@ -114,6 +120,7 @@ def build_graph():
     graph.add_node("service_request", service_request_node)
     graph.add_node("escalation", escalation_node)
     graph.add_node("human_review", human_review_node)
+    graph.add_node("clarify", clarify_node)
     graph.add_node("log", log_node)
 
     graph.set_entry_point("classify")
@@ -126,9 +133,10 @@ def build_graph():
             "service_request": "service_request",
             "escalation": "escalation",
             "human_review": "human_review",
+            "clarify": "clarify",
         },
     )
-    for branch in ("complaint", "general_enquiry", "service_request", "escalation", "human_review"):
+    for branch in ("complaint", "general_enquiry", "service_request", "escalation", "human_review", "clarify"):
         graph.add_edge(branch, "log")
     graph.add_edge("log", END)
 

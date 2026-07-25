@@ -8,7 +8,7 @@ logic and output shape, not prompt-generation quality.
 import pytest
 
 from app.models import ClassificationResult
-from app.remediation import complaint, escalation, general_enquiry, human_review, service_request
+from app.remediation import clarify, complaint, escalation, general_enquiry, human_review, service_request
 
 
 @pytest.fixture(autouse=True)
@@ -91,3 +91,14 @@ def test_human_review_branch_preserves_ai_suggestion_for_audit_trail():
     assert status == "pending_review"
     assert outputs["ai_suggested_type"] == "service_request"
     assert outputs["ai_suggested_urgency"] == "medium"
+
+
+def test_clarify_branch_asks_customer_to_rephrase_and_runs_no_department_handoff():
+    classification = _classification(is_gibberish=True, confidence=0.2)
+    steps, outputs, status = clarify.run("asdkj alksjd ;;; !!!! zzzzz", classification)
+
+    assert status == "needs_clarification"
+    assert "clarification_request" in outputs
+    assert "routing_notification" not in outputs
+    assert "draft_acknowledgement" not in outputs
+    assert len(steps) == 2

@@ -87,34 +87,43 @@ would move to a persistent disk or a hosted database.
 ```
                     ┌──────────────┐
    incoming request │  classify()  │  LLM structured-output call
-   ─────────────────▶  (LLM call)  │  -> request_type, urgency, confidence, sub_topic
+   ─────────────────▶  (LLM call)  │  -> request_type, urgency, confidence, sub_topic, is_gibberish
                     └──────┬───────┘
                            │
-                confidence < 0.6 ?
+                  is_gibberish ?
                  ┌─────────┴─────────┐
                 yes                  no
                  │                    │
-                 ▼                    ▼
-         ┌───────────────┐   route by request_type
-         │ human_review  │   ┌───────┬────────────┬─────────────────┬────────────┐
-         │ (AI unsure,   │   │       │            │                 │            │
-         │ pause & wait  │ complaint general_enquiry service_request  escalation
-         │ for override) │   │       │            │                 │            │
-         └───────┬───────┘   ▼       ▼            ▼                 ▼            │
-                 │      each branch runs ≥2 remediation steps, then logs to SQLite│
-                 └──────────────────────────────┬────────────────────────────────┘
-                                                 ▼
-                                     requests_log (audit trail)
+                 ▼           confidence < 0.6 ?
+         ┌───────────────┐   ┌─────────┴─────────┐
+         │   clarify     │  yes                  no
+         │ (no intent to │   │                    │
+         │  act on, ask  │   ▼                    ▼
+         │  to rephrase) │  ┌───────────────┐   route by request_type
+         └───────┬───────┘  │ human_review  │   ┌───────┬────────────┬─────────────────┬────────────┐
+                 │          │ (AI unsure,   │   │       │            │                 │            │
+                 │          │ pause & wait  │ complaint general_enquiry service_request  escalation
+                 │          │ for override) │   │       │            │                 │            │
+                 │          └───────┬───────┘   ▼       ▼            ▼                 ▼            │
+                 │                  │      each branch runs ≥2 remediation steps, then logs to SQLite│
+                 └──────────────────┴──────────────────────────────┬────────────────────────────────┘
+                                                                    ▼
+                                                        requests_log (audit trail)
 ```
 
-Classification and human-review routing are decided together up front: the LLM assigns
-a `request_type`, `urgency`, and a `confidence` score. If confidence falls below a
-configurable threshold (default `0.6`), the request is routed to a **human_review**
-branch regardless of predicted type — this is the brief's "escalation override for edge
-cases the AI is uncertain about." Otherwise it's routed by `request_type` into one of
-four dedicated branches. Every branch, including `human_review`, ends by writing a
-full record (classification, branch, steps taken, generated outputs, status) to a SQLite
-audit trail.
+Routing is decided in three steps, checked in this order. First, `raw_text` must be at
+least 10 characters or the API rejects it outright (`422`) before classification ever
+runs. Second, the LLM assigns a `request_type`, `urgency`, `confidence`, and an
+`is_gibberish` flag; if `is_gibberish` is true (input has no discernible customer
+intent — random characters, keyboard mashing) the request is routed straight to
+**clarify**, which asks the customer to resend with more detail and skips every
+remediation branch and the confidence check entirely. Third, if the input is intelligible
+but confidence falls below a configurable threshold (default `0.6`), the request is
+routed to **human_review** regardless of predicted type — this is the brief's "escalation
+override for edge cases the AI is uncertain about." Otherwise it's routed by
+`request_type` into one of four dedicated branches. Every branch, including
+`human_review` and `clarify`, ends by writing a full record (classification, branch,
+steps taken, generated outputs, status) to a SQLite audit trail.
 
 A human reviewer can later call the override endpoint on any logged request (not just
 ones the AI flagged) to supply a corrected classification; the case is re-run through the
@@ -138,6 +147,10 @@ One LLM call per request returns a structured `ClassificationResult`:
 | `confidence` | 0-1, how sure the model is about `request_type` |
 | `sub_topic` | e.g. `billing`, `technical`, `account`, `general`; used for KB lookup / department routing |
 | `reasoning` | one-sentence justification, kept in the audit trail |
+| `is_gibberish` | true when the input text has no discernible customer intent (random characters, keyboard mashing); routes to the Clarify branch instead of any remediation branch |
+
+`raw_text` also has a hard `min_length=10` at the API boundary (`RequestIn` model) — anything
+shorter is rejected with `422` before it ever reaches classification.
 
 ### Intake channels
 
@@ -161,6 +174,12 @@ Email and Web Form identify the customer by email address. File Upload keeps an 
 | **Service Request** | Medium | Extract required details (LLM) → Route to department (config-driven mapping) → Generate confirmation (LLM) → Set SLA timer (24h) | `in_progress` |
 | **Escalation / Urgent** | Critical | Flag for human review → Draft urgent acknowledgement (LLM) → Notify supervisor → Pause auto-resolution | `pending_review` |
 | **Human Review** (cross-cutting, low-confidence) | any | Flag low-confidence case → Draft generic acknowledgement (LLM) → Notify supervisor → Pause pending override | `pending_review` |
+| **Clarify** (cross-cutting, unintelligible input) | any | Detect unintelligible input → skip classification-based routing entirely → return a request to rephrase | `needs_clarification` |
+
+The Clarify branch takes priority over both the confidence-based Human Review branch and normal
+type-based routing: if `is_gibberish` is true, the request is never handed to a department, drafted
+a response, or queued for human review — there is no discernible intent to act on, so the only
+output is a plain-language ask for the customer to resend with more detail.
 
 Notifications/routing ("Escalated to Senior Handler Queue", "Routed to Billing Team", etc.)
 are simulated: logged with a `[SIMULATED]` prefix rather than calling real Slack/email

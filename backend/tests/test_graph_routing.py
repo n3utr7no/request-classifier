@@ -17,6 +17,7 @@ def _classification(**overrides):
         confidence=0.9,
         sub_topic=None,
         reasoning="test",
+        is_gibberish=False,
     )
     defaults.update(overrides)
     return ClassificationResult(**defaults)
@@ -65,3 +66,23 @@ def test_route_after_classify_routes_by_request_type_when_confident():
         state["classification"] = _classification(request_type=request_type, confidence=0.95)
         state["needs_human_review"] = False
         assert graph.route_after_classify(state) == request_type
+
+
+def test_gibberish_input_routes_to_clarify_and_skips_human_review(monkeypatch):
+    monkeypatch.setattr(
+        graph,
+        "classify_request",
+        lambda raw_text, channel: _classification(confidence=0.2, is_gibberish=True),
+    )
+    result_state = graph.classify_node(_initial_state())
+
+    # is_gibberish takes priority over the confidence-based human_review path,
+    # even though 0.2 confidence would also trigger human_review on its own.
+    assert graph.route_after_classify(result_state) == "clarify"
+
+
+def test_gibberish_flag_overrides_high_confidence_type_routing():
+    state = _initial_state()
+    state["classification"] = _classification(request_type="complaint", confidence=0.95, is_gibberish=True)
+    state["needs_human_review"] = False
+    assert graph.route_after_classify(state) == "clarify"

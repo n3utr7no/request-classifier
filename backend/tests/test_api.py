@@ -83,6 +83,13 @@ def test_get_missing_request_returns_404(client):
     assert response.status_code == 404
 
 
+def test_submit_request_rejects_raw_text_under_ten_characters(client):
+    response = client.post(
+        "/requests", json={"raw_text": "too short", "channel": "email", "customer_id": "CUST-1234"}
+    )
+    assert response.status_code == 422
+
+
 def test_batch_isolates_a_single_item_failure(client, monkeypatch):
     call_count = {"n": 0}
 
